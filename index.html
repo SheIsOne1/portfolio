@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shiri Arbiv Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Familjen+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: viewfinder-framed project grid, filtered by medium; one oversized name as the only loud element */
+:root{
+  --bg:#EDEFF2; --surface:#F8F9FB; --ink:#15171C; --muted:#5B6170; --line:#D3D7DF;
+  --accent:#2F3CF0; --accent-ink:#FFFFFF; --rec:#E5402F;
+  --display:"Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --body:"Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111318; --surface:#191C23; --ink:#ECEEF3; --muted:#9AA0AE; --line:#2B303A;
+  --accent:#8C95FF; --accent-ink:#0E1020; --rec:#FF6A57; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111318; --surface:#191C23; --ink:#ECEEF3; --muted:#9AA0AE; --line:#2B303A;
+  --accent:#8C95FF; --accent-ink:#0E1020; --rec:#FF6A57; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+header.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:20px;
+  font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header.top nav{display:flex;gap:20px;flex-wrap:wrap}
+header.top a{text-decoration:none}
+header.top a:hover{color:var(--ink)}
+.rec{display:inline-flex;align-items:center;gap:8px}
+.rec::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--rec)}
+@media (prefers-reduced-motion:no-preference){.rec::before{animation:blink 1.6s steps(1) infinite}}
+@keyframes blink{50%{opacity:.15}}
+
+.hero{padding-block:40px 32px;border-bottom:1px solid var(--line)}
+.hero h1{font:800 clamp(56px,13vw,168px)/.86 var(--display);letter-spacing:-.045em;margin:0;text-wrap:balance}
+.hero h1 span span{color:var(--accent)}
+.hero h1{white-space:nowrap;font-size:clamp(40px,7.5vw,96px);line-height:1}
+.hero h1 .fit{display:inline-block;transform-origin:left center}
+.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:36px;align-items:end}
+.hero p{margin:0;max-width:52ch;font-size:19px;line-height:1.5}
+.specs{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font:400 13px/1.5 var(--mono);color:var(--muted);justify-self:end}
+.specs dt{text-transform:uppercase;letter-spacing:.08em}
+.specs dd{margin:0;color:var(--ink)}
+@media (max-width:720px){.hero-row{grid-template-columns:1fr}.specs{justify-self:start}}
+
+.work{padding-block:40px 24px}
+.bar{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.bar h2{font:700 28px/1.1 var(--display);margin:0;letter-spacing:-.02em}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters button{font:500 13px/1 var(--body);padding:9px 14px;border-radius:999px;border:1px solid var(--line);
+  background:transparent;color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters button .n{font-family:var(--mono);opacity:.6;margin-left:6px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:40px 28px}
+@media (max-width:400px){.grid{grid-template-columns:1fr}}
+.card{all:unset;display:flex;flex-direction:column;gap:14px;cursor:pointer;min-width:0}
+.frame{position:relative;aspect-ratio:16/9;max-width:100%;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.card:hover .frame img{transform:scale(1.03)}
+.frame video.prev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s}
+.card.playing .frame video.prev{opacity:1;z-index:1}
+.card.playing .frame .tag,.card.playing .frame .c{z-index:2}
+.frame .ph{position:absolute;inset:0;display:grid;place-items:center;font:500 12px var(--mono);color:var(--muted);
+  letter-spacing:.06em;text-transform:uppercase;text-align:center;padding:16px;
+  background:repeating-linear-gradient(135deg,transparent 0 14px,color-mix(in srgb,var(--line) 45%,transparent) 14px 15px)}
+.frame .c{position:absolute;width:18px;height:18px;border:2px solid var(--accent);opacity:0;transition:opacity .2s}
+.frame .c.tl{top:10px;left:10px;border-right:0;border-bottom:0}.frame .c.tr{top:10px;right:10px;border-left:0;border-bottom:0}
+.frame .c.bl{bottom:10px;left:10px;border-right:0;border-top:0}.frame .c.br{bottom:10px;right:10px;border-left:0;border-top:0}
+.card:hover .c,.card:focus-visible .c{opacity:1}
+.card:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
+.tag{position:absolute;top:10px;left:50%;transform:translateX(-50%);font:500 11px var(--mono);letter-spacing:.08em;
+  text-transform:uppercase;background:var(--ink);color:var(--bg);padding:4px 8px}
+.meta{display:flex;justify-content:space-between;gap:12px;font:400 12px/1.4 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.card h3{font:700 24px/1.15 var(--display);margin:0;letter-spacing:-.015em;text-wrap:balance}
+.card p{margin:0;color:var(--muted);max-width:60ch}
+
+.todo{border-bottom:1px dashed var(--accent);color:var(--muted)}
+
+.about{display:grid;grid-template-columns:1fr 1.4fr;gap:40px;padding-block:56px;border-top:1px solid var(--line);margin-top:48px}
+.about h2{font:700 28px/1.1 var(--display);margin:0;letter-spacing:-.02em}
+.about .txt{display:flex;flex-direction:column;gap:16px;max-width:62ch;min-width:0}
+.about .txt p{margin:0}
+.tools{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
+.tools li{font:500 12px/1 var(--mono);padding:8px 10px;border:1px solid var(--line);background:var(--surface)}
+@media (max-width:720px){.about{grid-template-columns:1fr}}
+
+.contact{padding-block:48px 64px;border-top:1px solid var(--line);margin-top:48px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.contact .big{font:800 clamp(28px,5vw,48px)/1.05 var(--display);letter-spacing:-.03em;margin:0}
+.mail{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mail code{font:500 15px var(--mono);user-select:all;word-break:break-all}
+.btn{font:600 14px/1 var(--body);padding:12px 16px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+
+dialog{border:0;padding:0;max-width:min(860px,calc(100vw - 32px));width:100%;background:var(--surface);color:var(--ink);max-height:calc(100vh - 32px)}
+dialog::backdrop{background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(6px)}
+.dlg{display:flex;flex-direction:column}
+.dlg .body{padding:24px 28px 28px;display:flex;flex-direction:column;gap:18px}
+.dlg h3{font:800 clamp(28px,4vw,40px)/1.05 var(--display);margin:0;letter-spacing:-.03em}
+.dlg .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0;padding:16px 0;border-block:1px solid var(--line)}
+.dlg .facts div{min-width:0}
+.dlg .facts dt{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.dlg .facts dd{margin:4px 0 0}
+.dlg .long{margin:0;max-width:65ch}
+.dlg .links{display:flex;gap:10px;flex-wrap:wrap}
+.titlerow{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap}
+.titlerow h3{min-width:0}
+h3.rtl{text-align:right}
+.titlerow h3.rtl{flex:1 1 auto;order:2}
+.wip{display:inline-block;vertical-align:middle;font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--rec);border:1px solid var(--rec);padding:5px 7px;margin-left:6px;position:relative;top:-2px;white-space:nowrap}
+.viewer{position:relative;background:#000;max-width:100%}
+.stage{aspect-ratio:16/9;max-width:100%;display:grid;place-items:center;overflow:hidden}
+.stage video,.stage img{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;
+  background:rgba(0,0,0,.55);color:#fff;font:400 28px/1 var(--body);cursor:pointer;display:grid;place-items:center;padding-bottom:3px;z-index:2}
+.nav:hover{background:rgba(0,0,0,.8)}
+.nav.prev{left:12px}.nav.next{right:12px}
+.dots{position:absolute;left:0;right:0;bottom:-28px;display:flex;justify-content:center;gap:8px}
+.dots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer}
+.dots button.vid{width:18px;border-radius:4px}
+.dots button[aria-current="true"]{background:var(--accent)}
+.viewer:has(.dots){margin-bottom:28px}
+.stills{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.stills img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;cursor:zoom-in;border:1px solid var(--line)}
+.stills img.big{grid-column:1/-1;cursor:zoom-out}
+.close{position:absolute;top:12px;right:12px;font:500 12px var(--mono);background:var(--ink);color:var(--bg);border:0;padding:8px 10px;cursor:pointer;z-index:2}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <span class="rec">Portfolio 2026</span>
+    <nav><a href="#work">Work</a><a href="https://shiriarbiv3.wixsite.com/my-site" target="_blank" rel="noopener">Photography ↗</a><a href="#contact">Contact</a></nav>
+  </header>
+
+  <section class="hero">
+    <h1 id="name"><span class="fit">Shiri Arbiv<span>.</span></span></h1>
+    <div class="hero-row">
+      <p>Digital media design student working across platforms: Unity game engine, motion graphics, cinematography and web design.</p>
+      <dl class="specs">
+        <dt>Study</dt><dd>Digital Media Design</dd>
+        <dt>Mediums</dt><dd>Interactive · Motion · Film · Web</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="work" id="work">
+    <div class="bar">
+      <h2>Selected work</h2>
+      <div class="filters" id="filters" role="group" aria-label="Filter by medium"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="about" id="about" hidden>
+    <h2>About</h2>
+    <div class="txt">
+      <p>I started as a photographer, and that still shapes how I design: composition, light and the moment a frame feels right. In my Digital Media Design studies I've carried that into real-time 3D in Unity, VR spaces you can stand inside, motion graphics in After Effects, and interactive web design.</p>
+      <p><span class="todo">[Add one line about what you want to do next: a role, a field, a kind of project.]</span></p>
+      <ul class="tools" aria-label="Tools">
+        <li>Unity</li><li>C#</li><li>VR</li><li>After Effects</li><li>Premiere Pro</li><li>Photoshop</li><li>Lightroom</li><li>Figma</li>
+      </ul>
+      <p><a class="btn ghost" href="https://shiriarbiv3.wixsite.com/my-site" target="_blank" rel="noopener" id="photoLink">See my photography site ↗</a></p>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <p class="big">Let's make something.</p>
+    <div class="mail">
+      <code id="email">shiriarbiv6@gmail.com</code>
+      <button class="btn" id="copy" type="button">Copy email</button>
+    </div>
+  </section>
+</div>
+
+<dialog id="dlg"><button class="close" id="closeDlg" type="button">Close ✕</button><div class="dlg" id="dlgBody"></div></dialog>
+
+<script>
+/* ---- EDIT YOUR PROJECTS HERE ----
+   img:   a still/screenshot (paste a data: URI or publish the image next to the page)
+   video: an .mp4 published next to the page — plays inside the project view
+   stills: [image, image, ...] — a gallery of frames (e.g. from the short film)
+   links: [{label, url}] e.g. YouTube, Vimeo, itch.io, WebGL build, live site          */
+const PROJECTS = [
+  { id:"game-1", medium:"Interactive", title:"Find Me", year:"2025", role:"Game design & development",
+    tools:"Unity · C#", short:"Your girl got lost in the forest. How far will you go to save her?", long:"Your girl got lost in the forest. How far will you go to save her?",
+    img:"media/game1-poster.jpg", video:"media/game1.mp4",
+    stills:[1,2,3,4,5,6,7,8,9].map(n=>`media/game1-still-${n}.jpg`), links:[] },
+  { id:"game-2", medium:"Interactive", title:"PhotoRoyal", status:"Work in progress", year:"2026", role:"Game design & development",
+    tools:"Unity · C#", short:"", long:"",
+    img:"media/game2-poster.jpg", video:"media/game2-title.mp4", videos:["media/game2-title.mp4","media/game2-list.mp4"], stills:[1,2,3,4,5,6,7,8,9].map(n=>`media/game2-still-${n}.jpg`), links:[] },
+  { id:"vr", medium:"Interactive", title:"Once Upon a Time", year:"2026", role:"VR environment design",
+    tools:"Unity · VR", short:"", long:"",
+    img:"media/vr-poster.jpg", video:"media/vr.mp4",
+    stills:[1,2,3,4,5,6,7].map(n=>`media/vr-still-${n}.jpg`), links:[] },
+  { id:"film", medium:"Film", title:"Family Therapy", status:"Work in progress", year:"2026", role:"Director of Photography",
+    tools:"Camera", short:"", long:"",
+    img:"media/film-poster.jpg", stills:[1,2,3,4,5].map(n=>`media/film-still-${n}.jpg`), links:[{label:"Watch the rough cut", url:"https://www.youtube.com/watch?v=bhFGC683qtQ"}] },
+  { id:"web", medium:"Web", title:"String Curtain", year:"2025", role:"Web design",
+    tools:"Web", short:"", long:"",
+    img:"media/website-poster.jpg", video:"media/website-opening.mp4",
+    stills:["media/web-still-1.jpg","media/web-still-2.jpg","media/web-still-3.jpg","media/web-still-4.jpg","media/web-still-5.jpg","media/web-still-6.jpg"],
+    links:[{label:"Visit the website", url:"https://sheisone1.github.io/string-curtain/"}] },
+  { id:"ae-1", medium:"Motion", title:"Intro", year:"2025", role:"Motion design · Compositing",
+    tools:"After Effects", short:"", long:"",
+    img:"media/intro-poster.jpg", video:"media/intro.mp4", links:[], featured:true },
+  { id:"ae-2", medium:"Motion", title:"Time", year:"2025", role:"Motion design",
+    tools:"After Effects", short:"", long:"",
+    img:"media/comp1-poster.jpg", video:"media/comp1.mp4", links:[], featured:true },
+  { id:"ae-3", medium:"Motion", title:"רוצה דקה?", year:"2026", role:"Motion design",
+    tools:"After Effects", short:"", long:"",
+    img:"media/hug-poster.jpg", video:"media/hug.mp4", links:[] },
+];
+const PHOTO_SITE = "https://shiriarbiv3.wixsite.com/my-site";
+
+const ORDER = ["All","Interactive","Motion","Film","Web"];
+const grid = document.getElementById("grid"), filters = document.getElementById("filters");
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = s => esc(s).replace(/\[([^\]]+)\]/g,'<span class="todo">[$1]</span>');
+const frame = (p,card) => `<div class="frame">${card&&p.video?`<video class="prev" src="${esc(p.video)}" muted loop playsinline preload="none"></video>`:""}${p.img?`<img src="${esc(p.img)}" alt="${esc(p.title)}">`:`<div class="ph">Add a still from<br>${esc(p.title)}</div>`}
+  <span class="tag">${esc(p.medium)}${p.video?" · ▶ Video":""}</span><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i></div>`;
+
+const rtl = p => /[֐-׿]/.test(p.title) ? ' dir="rtl" class="rtl"' : "";
+let current = "All";
+try{ current = localStorage.getItem("pf-filter") || "All"; if(!ORDER.includes(current)) current="All"; }catch(e){}
+
+function renderFilters(){
+  filters.innerHTML = ORDER.map(m=>{
+    const n = m==="All"?PROJECTS.length:PROJECTS.filter(p=>p.medium===m).length;
+    return n?`<button type="button" id="f-${m}" aria-pressed="${m===current}" data-m="${m}">${m}<span class="n">${n}</span></button>`:"";
+  }).join("");
+}
+function renderGrid(){
+  const list = (current==="All"?PROJECTS:PROJECTS.filter(p=>p.medium===current)).slice().sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
+  grid.innerHTML = list.map(p=>`<button class="card" type="button" data-id="${p.id}" aria-label="Open ${esc(p.title)}">
+    ${frame(p,true)}<div class="meta"><span>${esc(p.role)}</span><span>${esc(p.year)}</span></div>
+    <h3${rtl(p)}><bdi>${esc(p.title)}</bdi>${p.status?` <span class="wip">${esc(p.status)}</span>`:""}</h3>${p.short?`<p>${fmt(p.short)}</p>`:""}</button>`).join("");
+}
+const canHover = matchMedia("(hover:hover)").matches && !matchMedia("(prefers-reduced-motion:reduce)").matches;
+grid.addEventListener("mouseover",e=>{if(!canHover)return;const c=e.target.closest(".card");const v=c&&c.querySelector("video.prev");
+  if(v&&!c.contains(e.relatedTarget)){v.currentTime=0;v.play().then(()=>c.classList.add("playing")).catch(()=>{});}});
+grid.addEventListener("mouseout",e=>{const c=e.target.closest(".card");const v=c&&c.querySelector("video.prev");
+  if(v&&!c.contains(e.relatedTarget)){v.pause();c.classList.remove("playing");}});
+filters.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;current=b.dataset.m;
+  try{localStorage.setItem("pf-filter",current)}catch(err){} renderFilters();renderGrid();});
+
+const dlg=document.getElementById("dlg"), dlgBody=document.getElementById("dlgBody");
+grid.addEventListener("click",e=>{const c=e.target.closest(".card");if(!c)return;const p=PROJECTS.find(x=>x.id===c.dataset.id);
+  const slides = [];
+  (p.videos || (p.video?[p.video]:[])).forEach(v=>slides.push({type:"video",src:v}));
+  (p.stills||[]).forEach(s=>slides.push({type:"img",src:s}));
+  const media = slides.length ? `<div class="viewer" id="viewer">
+      <div class="stage" id="stage"></div>
+      ${slides.length>1?`<button class="nav prev" id="vPrev" type="button" aria-label="Previous">‹</button>
+      <button class="nav next" id="vNext" type="button" aria-label="Next">›</button>
+      <div class="dots" id="dots">${slides.map((s,i)=>`<button type="button" data-i="${i}" aria-label="${s.type==="video"?"Video":"Still "+i}" class="${s.type==="video"?"vid":""}"></button>`).join("")}</div>`:""}
+    </div>` : frame(p);
+  const stills = "";
+  dlgBody.innerHTML = `${media}<div class="body"><div class="meta"><span>${esc(p.medium)}</span><span>${esc(p.year)}</span></div>
+    <div class="titlerow"><h3${rtl(p)}><bdi>${esc(p.title)}</bdi>${p.status?` <span class="wip">${esc(p.status)}</span>`:""}</h3>${p.links.length?`<div class="links">${p.links.map(l=>`<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>`:""}</div>
+    <dl class="facts"><div><dt>Role</dt><dd>${esc(p.role)}</dd></div><div><dt>Tools</dt><dd>${esc(p.tools)}</dd></div><div><dt>Year</dt><dd>${esc(p.year)}</dd></div></dl>
+    ${p.long?`<p class="long">${fmt(p.long)}</p>`:""}${stills}</div>`;
+  dlg.showModal();
+  if(slides.length) setupViewer(p,slides);});
+
+let viewerGo = null;
+function setupViewer(p,slides){
+  const stage=document.getElementById("stage"); let idx=0;
+  const show=i=>{
+    idx=(i+slides.length)%slides.length; const s=slides[idx];
+    stage.querySelectorAll("video").forEach(v=>v.pause());
+    stage.innerHTML = s.type==="video"
+      ? `<video src="${esc(s.src)}" controls playsinline autoplay preload="auto"${p.img?` poster="${esc(p.img)}"`:""}></video>`
+      : `<img src="${esc(s.src)}" alt="${esc(p.title)}, still ${idx}">`;
+    const v=stage.querySelector("video"); if(v){ v.play().catch(()=>{}); if(slides.length>1) v.addEventListener("ended",()=>show(idx+1)); }
+    document.querySelectorAll("#dots button").forEach((b,j)=>b.setAttribute("aria-current", j===idx?"true":"false"));
+  };
+  viewerGo = d=>show(idx+d);
+  const pv=document.getElementById("vPrev"), nx=document.getElementById("vNext"), dots=document.getElementById("dots");
+  if(pv){pv.onclick=()=>show(idx-1); nx.onclick=()=>show(idx+1); dots.onclick=e=>{const b=e.target.closest("button"); if(b) show(+b.dataset.i);};}
+  show(0);
+}
+dlg.addEventListener("keydown",e=>{ if(!viewerGo||e.target.closest("video"))return;
+  if(e.key==="ArrowRight"){viewerGo(1);e.preventDefault();} if(e.key==="ArrowLeft"){viewerGo(-1);e.preventDefault();} });
+document.getElementById("closeDlg").onclick=()=>dlg.close();
+dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close();
+  const s=e.target.closest(".stills img"); if(s){dlgBody.querySelectorAll(".stills img.big").forEach(x=>{if(x!==s)x.classList.remove("big")}); s.classList.toggle("big");}});
+dlg.addEventListener("close",()=>{dlgBody.querySelectorAll("video").forEach(v=>v.pause()); viewerGo=null;});
+
+if(PHOTO_SITE) document.getElementById("photoLink").href = PHOTO_SITE;
+document.getElementById("copy").addEventListener("click",function(){
+  const t=document.getElementById("email").textContent, b=this;
+  const done=()=>{b.textContent="Copied";setTimeout(()=>b.textContent="Copy email",1600)};
+  const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById("email"));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Selected, press copy";};
+  try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}
+});
+function fitName(){
+  const h=document.getElementById("name"), s=h.querySelector(".fit");
+  h.style.fontSize=""; const w=h.clientWidth, sw=s.getBoundingClientRect().width;
+  if(w&&sw){ const cur=parseFloat(getComputedStyle(h).fontSize); h.style.fontSize=(cur*w/sw*0.995)+"px"; }
+}
+renderFilters(); renderGrid();
+</script>
+
+</body>
+</html>
